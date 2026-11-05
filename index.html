@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>knACK CYBER</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single navy console. Signal-line motif from the logo runs as section dividers; mono for voice, sans for reading. */
+:root {
+  --navy: #0B1220;
+  --navy-2: #111A2C;
+  --navy-3: #18233A;
+  --white: #E8EDF5;
+  --mint: #2EE6A6;
+  --slate: #5B6B84;
+  --slate-lt: #A9B6CA;
+  --line: rgba(169, 182, 202, 0.14);
+  --mint-dim: rgba(46, 230, 166, 0.12);
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --f-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --s-xs: 0.75rem; --s-sm: 0.875rem; --s-md: 1.0625rem; --s-lg: 1.375rem; --s-xl: 2rem; --s-2xl: clamp(2.25rem, 5.5vw, 4rem);
+  --max: 72rem;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { background: var(--navy); color: var(--white); font-family: var(--f-sans); font-size: var(--s-md); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--navy); }
+a { color: var(--mint); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: var(--max); margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+
+.label { font-family: var(--f-mono); font-size: var(--s-xs); font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate-lt); }
+.label b { color: var(--mint); font-weight: 500; }
+h1, h2, h3 { font-family: var(--f-mono); text-wrap: balance; margin: 0; }
+h1 { font-size: var(--s-2xl); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
+h2 { font-size: var(--s-xl); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; }
+h3 { font-size: var(--s-lg); font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+p { margin: 0; max-width: 62ch; }
+.muted { color: var(--slate-lt); }
+.mint { color: var(--mint); }
+
+/* Header */
+header.site { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(11, 18, 32, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.75rem; }
+.brand { display: block; line-height: 0; }
+.brand svg { height: 40px; width: auto; }
+nav.primary { display: flex; gap: clamp(0.75rem, 2.5vw, 2rem); flex-wrap: wrap; justify-content: flex-end; }
+nav.primary a { font-family: var(--f-mono); font-size: var(--s-sm); font-weight: 500; color: var(--slate-lt); }
+nav.primary a:hover { color: var(--white); text-decoration: none; }
+nav.primary a.cta { color: var(--mint); }
+@media (max-width: 560px) { nav.primary a:not(.cta) { display: none; } .brand svg { height: 34px; } }
+
+/* Hero */
+.hero { padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 7vw, 5rem); position: relative; overflow: hidden; }
+.hero .wrap { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr); align-items: center; }
+@media (min-width: 900px) { .hero .wrap { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
+.hero-copy { display: grid; gap: 1.5rem; min-width: 0; }
+.hero h1 .k { color: var(--mint); }
+.hero p.lead { font-size: 1.1875rem; color: var(--slate-lt); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--f-mono); font-size: var(--s-sm); font-weight: 700; padding: 0.8rem 1.25rem; border-radius: 4px; border: 1px solid var(--mint); cursor: pointer; transition: background 0.15s, color 0.15s; }
+.btn.primary { background: var(--mint); color: var(--navy); }
+.btn.primary:hover { background: var(--white); border-color: var(--white); text-decoration: none; }
+.btn.ghost { background: transparent; color: var(--mint); }
+.btn.ghost:hover { background: var(--mint-dim); text-decoration: none; }
+
+.mark-panel { position: relative; min-width: 0; }
+.mark-panel svg.mark { width: 100%; max-width: 420px; height: auto; display: block; margin-inline: auto; overflow: visible; }
+.mark-panel .pulse { transform-origin: 187px 112px; transform-box: view-box; animation: pulse 2.4s ease-out infinite; }
+@keyframes pulse { 0% { opacity: 0.55; transform: scale(1); } 70%,100% { opacity: 0; transform: scale(3.2); } }
+.readout { margin-top: 1.25rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; }
+.readout div { padding: 0.75rem 0.9rem; display: grid; gap: 0.15rem; min-width: 0; }
+.readout div + div { border-left: 1px solid var(--line); }
+.readout dt { font-family: var(--f-mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--slate); }
+.readout dd { margin: 0; font-family: var(--f-mono); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--white); font-size: var(--s-md); }
+.readout dd.ok { color: var(--mint); }
+
+/* Signal divider */
+.signal { height: 28px; width: 100%; display: block; }
+.signal path { stroke: var(--slate); }
+
+/* Sections */
+section { padding-block: clamp(3.5rem, 8vw, 6rem); }
+.sec-head { display: grid; gap: 0.9rem; margin-bottom: 2.5rem; }
+
+.services { display: grid; gap: 1px; grid-template-columns: minmax(0, 1fr); background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+@media (min-width: 780px) { .services { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.svc { background: var(--navy); padding: 1.75rem; display: grid; gap: 0.9rem; align-content: start; min-width: 0; }
+.svc .tag { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--mint); letter-spacing: 0.1em; }
+.svc ul { margin: 0.25rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; font-size: var(--s-sm); color: var(--slate-lt); }
+.svc li { padding-left: 1.1rem; position: relative; }
+.svc li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.5rem; height: 2px; background: var(--slate); }
+
+/* Normalization showcase */
+.norm { background: var(--navy-2); border-block: 1px solid var(--line); }
+.norm-grid { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .norm-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 3rem; } }
+.norm-copy { display: grid; gap: 1.1rem; min-width: 0; }
+.term { background: var(--navy); border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
+.term-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 1rem; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.tabs button { font-family: var(--f-mono); font-size: var(--s-xs); background: transparent; color: var(--slate-lt); border: 1px solid transparent; border-radius: 3px; padding: 0.3rem 0.6rem; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--navy); background: var(--mint); }
+.tabs button:hover:not([aria-selected="true"]) { border-color: var(--line); color: var(--white); }
+.term pre { margin: 0; padding: 1.1rem 1.1rem 1.25rem; overflow-x: auto; font-family: var(--f-mono); font-size: 0.8125rem; line-height: 1.7; color: var(--slate-lt); }
+.term .k { color: var(--white); }
+.term .s { color: var(--mint); }
+.term .n { color: #F5C451; }
+.term .c { color: var(--slate); }
+.sev { display: inline-block; font-family: var(--f-mono); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; padding: 0.15rem 0.45rem; border-radius: 3px; }
+.sev.high { background: rgba(255, 107, 107, 0.15); color: #FF8A8A; }
+
+/* Process */
+.steps { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); counter-reset: step; }
+@media (min-width: 780px) { .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.step { display: grid; gap: 0.6rem; align-content: start; padding-top: 1.25rem; border-top: 2px solid var(--slate); min-width: 0; }
+.step:first-child { border-top-color: var(--mint); }
+.step .num { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate-lt); letter-spacing: 0.14em; }
+.step p { font-size: var(--s-sm); color: var(--slate-lt); }
+
+/* Contact */
+.contact-grid { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; } }
+.contact-copy { display: grid; gap: 1.1rem; align-content: start; min-width: 0; }
+form { display: grid; gap: 1rem; min-width: 0; }
+.field { display: grid; gap: 0.4rem; }
+.field label { font-family: var(--f-mono); font-size: var(--s-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate-lt); }
+.field input, .field select, .field textarea { font: inherit; font-size: var(--s-md); color: var(--white); background: var(--navy-2); border: 1px solid var(--line); border-radius: 4px; padding: 0.7rem 0.85rem; width: 100%; }
+.field textarea { min-height: 7.5rem; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--mint); box-shadow: 0 0 0 3px var(--mint-dim); }
+.row2 { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) { .row2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.form-note { font-family: var(--f-mono); font-size: var(--s-sm); color: var(--mint); min-height: 1.5em; }
+
+footer { border-top: 1px solid var(--line); padding-block: 2rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+footer svg { height: 30px; width: auto; }
+footer small { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate); }
+
+/* Section-flow additions */
+.tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate-lt); border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.75rem; }
+.split { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; } }
+.stack { display: grid; gap: 1.1rem; align-content: start; min-width: 0; }
+.caption { margin-top: 1rem; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate-lt); text-align: center; }
+.badge { display: grid; gap: 0.1rem; padding: 0.75rem 1rem; border: 1px solid var(--line); border-left: 2px solid var(--mint); border-radius: 4px; background: var(--navy-2); max-width: 22rem; margin-inline: auto; }
+.cards4 { display: grid; gap: 1px; grid-template-columns: minmax(0, 1fr); background: var(--line); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+@media (min-width: 640px) { .cards4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cards4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.card { background: var(--navy); padding: 1.5rem; display: grid; gap: 0.85rem; grid-template-rows: auto auto auto 1fr auto auto; min-width: 0; }
+.card .diag { width: 100%; height: 92px; display: block; }
+.card .idx { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--mint); letter-spacing: 0.12em; }
+.card p { font-size: var(--s-sm); color: var(--slate-lt); }
+.card .meta { font-family: var(--f-mono); font-size: 0.6875rem; color: var(--slate); letter-spacing: 0.04em; }
+.card a.more { font-family: var(--f-mono); font-size: var(--s-sm); font-weight: 700; }
+.band { background: var(--navy-2); border-block: 1px solid var(--line); }
+.band > .wrap:not(.split) { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: center; justify-content: space-between; }
+.band > .wrap:not(.split) .stack { max-width: 44rem; }
+.band .term { background: var(--navy); }
+.watch { display: grid; border-top: 1px solid var(--line); }
+.watch div { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0.25rem 0.75rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.watch .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--mint); margin-top: 0.5rem; box-shadow: 0 0 0 4px var(--mint-dim); }
+.watch strong { font-family: var(--f-mono); font-weight: 700; }
+.watch span.d { grid-column: 2; font-size: var(--s-sm); color: var(--slate-lt); }
+.fine { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate); }
+.steps3 { display: grid; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+.steps3 li { list-style: none; display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0.25rem 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+.steps3 .n { font-family: var(--f-mono); font-weight: 800; color: var(--mint); font-size: var(--s-lg); line-height: 1.2; }
+.steps3 strong { font-family: var(--f-mono); }
+.steps3 span.d { grid-column: 2; font-size: var(--s-sm); color: var(--slate-lt); }
+.person { display: flex; gap: 1rem; align-items: center; padding: 1rem; border: 1px solid var(--line); border-radius: 6px; background: var(--navy-2); max-width: 28rem; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--navy-3); border: 1px solid var(--mint); font-family: var(--f-mono); font-weight: 800; color: var(--mint); flex: none; }
+.person small { display: block; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--slate-lt); }
+.faq { display: grid; border-top: 1px solid var(--line); min-width: 0; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1rem; padding: 1.1rem 0; font-family: var(--f-mono); font-weight: 700; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--mint); font-weight: 500; }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { padding-bottom: 1.2rem; color: var(--slate-lt); font-size: var(--s-sm); }
+.formbox { background: var(--navy-2); border: 1px solid var(--line); border-radius: 6px; padding: clamp(1.25rem, 3vw, 2rem); }
+.formbox .field input, .formbox .field select, .formbox .field textarea { background: var(--navy); }
+.notice { font-size: var(--s-xs); color: var(--slate-lt); border-left: 2px solid var(--slate); padding-left: 0.75rem; }
+.contact-block { font-family: var(--f-mono); font-size: var(--s-sm); color: var(--slate-lt); display: grid; gap: 0.2rem; }
+.ph { color: var(--slate); }
+footer.big { border-top: 1px solid var(--line); padding-block: 3rem 2rem; }
+footer.big .cols { display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 780px) { footer.big .cols { grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); } }
+footer.big h4 { margin: 0 0 0.75rem; font-family: var(--f-mono); font-size: var(--s-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate-lt); font-weight: 500; }
+footer.big ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; font-size: var(--s-sm); }
+footer.big ul a { color: var(--white); }
+footer.big .logo { line-height: 0; }
+footer.big .logo svg { height: 40px; width: auto; max-width: 100%; }
+footer.big > .wrap { display: block; }
+footer.big .bottom { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; }
+
+/* Risk charts */
+.riskpanel { display: grid; gap: 1rem; min-width: 0; }
+.rp-block { background: var(--navy-2); border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.1rem 1.1rem; display: grid; gap: 0.75rem; min-width: 0; }
+.rp-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.rp-delta { font-family: var(--f-mono); font-weight: 800; color: var(--mint); font-variant-numeric: tabular-nums; }
+.chart { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--f-mono); }
+.chart .ax { fill: var(--slate-lt); font-size: 8px; }
+.chart .axt { fill: var(--slate); font-size: 8.5px; letter-spacing: 0.14em; }
+.hm-lo { fill: rgba(91, 107, 132, 0.22); } .hm-md { fill: rgba(245, 196, 81, 0.20); } .hm-hi { fill: rgba(255, 138, 138, 0.24); } .hm-cr { fill: rgba(255, 107, 107, 0.42); }
+.hm-arrow { stroke: var(--slate-lt); stroke-width: 1.5; stroke-dasharray: 3 3; fill: none; }
+.hm-inh { fill: var(--white); }
+.hm-n { fill: var(--navy); font-size: 8px; font-weight: 800; }
+.hm-res { fill: var(--navy); stroke: var(--mint); stroke-width: 2.5; }
+.rp-legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.35rem 1rem; font-size: var(--s-xs); color: var(--slate-lt); }
+.rp-legend b { font-family: var(--f-mono); color: var(--white); margin-right: 0.35rem; }
+.rp-key { display: flex; flex-wrap: wrap; gap: 1.25rem; font-family: var(--f-mono); font-size: 0.6875rem; color: var(--slate-lt); }
+.rp-key i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.4rem; vertical-align: -1px; }
+.k-inh { background: var(--white); } .k-res { border: 2px solid var(--mint); }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .appetite { stroke: #F5C451; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.chart .ap { fill: #F5C451; }
+.chart .area { fill: var(--mint-dim); }
+.chart .trend { fill: none; stroke: var(--mint); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.chart .pt { fill: var(--navy-2); stroke: var(--mint); stroke-width: 2; }
+.chart .pt-end { fill: var(--mint); }
+.chart .val { fill: var(--slate-lt); font-size: 9.5px; font-weight: 700; }
+.chart .val.end { fill: var(--mint); }
+
+/* Partner Advisory */
+.pa { border-top: 1px solid var(--line); }
+.pa-list { display: grid; border-top: 1px solid var(--line); min-width: 0; }
+.pa-item { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.3rem 1rem; padding: 1.15rem 0; border-bottom: 1px solid var(--line); }
+.pa-item .idx { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--mint); letter-spacing: 0.08em; padding-top: 0.3rem; }
+.pa-item h3 { font-size: var(--s-md); }
+.pa-item p { grid-column: 2; font-size: var(--s-sm); color: var(--slate-lt); }
+@media (max-width: 860px) { nav.primary a[href="#questions"] { display: none; } }
+</style>
+</head>
+<body>
+
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="knACK CYBER home">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="272 2 327 95" role="img" aria-label="knACK"><path d="M276.00 91.64V6.96H293.40V51.97H301.99L315.33 27.84H334.70L316.95 59.04L335.05 91.64H315.33L301.87 66.58H293.40V91.64Z M340.62 91.64V27.84H357.44V40.02H362.54L357.44 44.08Q357.44 35.96 362.08 31.32Q366.72 26.68 374.60 26.68Q383.88 26.68 389.51 33.18Q395.14 39.67 395.14 50.46V91.64H377.74V52.20Q377.74 47.21 375.13 44.49Q372.52 41.76 367.76 41.76Q363.12 41.76 360.57 44.49Q358.02 47.21 358.02 52.20V91.64Z" fill="#E8EDF5"/><path d="M400.82 91.64 421.58 6.96H443.62L464.62 91.64H446.87L442.81 72.50H422.63L418.57 91.64ZM425.53 58.58H439.80L435.74 38.16Q434.92 33.76 434.05 29.41Q433.18 25.06 432.72 22.62Q432.26 25.06 431.50 29.35Q430.75 33.64 429.82 38.05Z M498.26 92.80Q489.68 92.80 483.30 89.61Q476.92 86.42 473.38 80.68Q469.84 74.94 469.84 67.28V31.32Q469.84 23.55 473.38 17.86Q476.92 12.18 483.30 8.99Q489.68 5.80 498.26 5.80Q506.73 5.80 513.05 8.99Q519.37 12.18 522.91 17.86Q526.45 23.55 526.45 31.32H509.05Q509.05 26.22 506.21 23.55Q503.36 20.88 498.14 20.88Q492.92 20.88 490.08 23.55Q487.24 26.22 487.24 31.32V67.28Q487.24 72.27 490.08 74.99Q492.92 77.72 498.14 77.72Q503.36 77.72 506.21 74.99Q509.05 72.27 509.05 67.28H526.45Q526.45 74.94 522.91 80.68Q519.37 86.42 513.05 89.61Q506.73 92.80 498.26 92.80Z M535.38 91.64V6.96H552.78V39.79H561.02L574.94 6.96H593.84L576.44 47.44L594.54 91.64H575.40L561.02 55.80H552.78V91.64Z" fill="#2EE6A6"/></svg>
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#services">Cyber Services</a>
+      <a href="#partner-advisory">Partner Advisory</a>
+      <a href="#approach">Approach</a>
+      <a href="#questions">Questions</a>
+      <a href="#contact" class="cta">Let's talk →</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- 1. Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label"><b>●</b>&nbsp; Security consulting for cloud and AI teams</span>
+        <h1>Every alert gets an <span class="k">ACK</span>.</h1>
+        <p class="lead">Hands-on security consulting for companies running in the cloud: posture reviews, unified security findings, and secure design for private AI services. For security vendors, partner-led advisory for entering the North American market.</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Request a scoping call</a>
+          <a class="btn ghost" href="#services">Explore Cyber Services</a>
+        </div>
+      </div>
+      <div class="mark-panel">
+        <svg class="mark" viewBox="-10 30 220 140" aria-hidden="true">
+          <g transform="translate(0 15) scale(1.1204) translate(12 -40)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M158 150 L52 150 C20 150 14 108 44 102 C40 70 78 54 100 72 C112 44 150 46 158 70" stroke="#5B6B84" stroke-width="5"/>
+            <path d="M2 124 L50 124 L64 92 L75 112 L84 128 L94 112" stroke="#E8EDF5" stroke-width="5"/>
+            <circle cx="2" cy="124" r="6" fill="#E8EDF5" stroke="none"/>
+            <path d="M94 112 L112 80 L127 132 L140 112 L174 112" stroke="#2EE6A6" stroke-width="6"/>
+            <circle class="pulse" cx="187" cy="112" r="11" fill="#2EE6A6" stroke="none"/>
+            <circle cx="187" cy="112" r="11" fill="#2EE6A6" stroke="none"/>
+          </g>
+        </svg>
+        <div class="caption">
+          <span>A conversation first. A written scope before any work starts.</span>
+        </div>
+        <div class="badge" style="margin-top:1rem">
+          <strong class="label" style="color:var(--white);letter-spacing:.1em">From signal to fix.</strong>
+          <span class="muted" style="font-size:var(--s-sm)">Technical depth, explained in plain terms.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><svg class="signal" viewBox="0 0 1200 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 H520 L540 4 L556 24 L572 8 L586 14 H1200" fill="none" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
+
+  <!-- 2. Positioning -->
+  <section>
+    <div class="wrap split">
+      <div class="stack">
+        <span class="label">For security and platform teams</span>
+        <h2>A second set of eyes before the next decision.</h2>
+      </div>
+      <div class="stack">
+        <p class="muted">We work with security leads, platform engineers and founders who need to know where they really stand. That might be a cloud estate that grew faster than its guardrails, a findings backlog nobody trusts, or an internal LLM service that is about to see real data.</p>
+        <p class="muted">Cloud controls, findings and AI risk are reviewed together, because in practice they share the same identities, data and owners.</p>
+        <div class="tags"><span class="chip">AWS · Azure · GCP</span><span class="chip">OCSF findings</span><span class="chip">Bedrock &amp; private LLMs</span></div>
+        <div class="actions"><a class="btn ghost" href="#contact">Talk about your environment</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Four service cards -->
+  <section id="services" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Cyber Services</span>
+        <h2>Five practices. One clear signal.</h2>
+      </div>
+      <div class="cards4">
+        <article class="card">
+          <svg class="diag" viewBox="0 0 240 92" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M70 70 H40 C22 70 18 46 36 42 C34 24 56 16 70 28 C78 12 104 14 110 30 C128 28 136 50 122 58" stroke="#5B6B84" stroke-width="2.5"/>
+            <rect x="150" y="18" width="70" height="56" rx="4" stroke="#A9B6CA" stroke-width="2"/>
+            <path d="M122 58 L150 46" stroke="#2EE6A6" stroke-width="2.5"/><circle cx="185" cy="46" r="8" stroke="#2EE6A6" stroke-width="2.5"/><path d="M185 54 V64" stroke="#2EE6A6" stroke-width="2.5"/>
+          </svg>
+          <span class="idx">01</span>
+          <h3>Cloud security posture</h3>
+          <p>A review of identity, network and workload controls across your accounts, measured against how your teams actually ship.</p>
+          <span class="meta">IAM · guardrails · drift detection</span>
+          <a class="more" href="#contact" data-topic="Cloud security posture">Discuss cloud posture →</a>
+        </article>
+        <article class="card">
+          <svg class="diag" viewBox="0 0 240 92" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 20 H90 L130 46" stroke="#5B6B84" stroke-width="2.5"/><path d="M14 46 H130" stroke="#A9B6CA" stroke-width="2.5"/><path d="M14 72 H90 L130 46" stroke="#5B6B84" stroke-width="2.5"/>
+            <circle cx="14" cy="20" r="4" fill="#5B6B84"/><circle cx="14" cy="46" r="4" fill="#A9B6CA"/><circle cx="14" cy="72" r="4" fill="#5B6B84"/>
+            <path d="M130 46 H210" stroke="#2EE6A6" stroke-width="3"/><circle cx="220" cy="46" r="8" fill="#2EE6A6"/>
+          </svg>
+          <span class="idx">02</span>
+          <h3>Finding normalization</h3>
+          <p>One schema for every scanner you run, with duplicates merged and each finding tied to an owner and a business impact.</p>
+          <span class="meta">OCSF mapping · de-dup · context</span>
+          <a class="more" href="#contact" data-topic="Finding normalization">Discuss findings →</a>
+        </article>
+        <article class="card">
+          <svg class="diag" viewBox="0 0 240 92" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="12" y="24" width="56" height="44" rx="4" stroke="#A9B6CA" stroke-width="2"/><path d="M24 38 H56 M24 48 H50 M24 58 H44" stroke="#5B6B84" stroke-width="2"/>
+            <path d="M68 46 H100" stroke="#5B6B84" stroke-width="2.5"/>
+            <path d="M100 30 L120 22 L140 30 V50 C140 62 130 70 120 74 C110 70 100 62 100 50 Z" stroke="#2EE6A6" stroke-width="2.5"/>
+            <path d="M140 46 H172" stroke="#5B6B84" stroke-width="2.5"/>
+            <circle cx="200" cy="46" r="24" stroke="#A9B6CA" stroke-width="2"/><circle cx="200" cy="46" r="6" fill="#2EE6A6"/>
+          </svg>
+          <span class="idx">03</span>
+          <h3>Private AI security</h3>
+          <p>Secure design for internal LLM and RAG services: who can call the model, what it can retrieve, and where its output can go.</p>
+          <span class="meta">Bedrock auth · RAG access · egress</span>
+          <a class="more" href="#contact" data-topic="Private AI security">Discuss AI security →</a>
+        </article>
+        <article class="card">
+          <svg class="diag" viewBox="0 0 240 92" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="40" y="10" width="76" height="72" rx="4" stroke="#A9B6CA" stroke-width="2"/>
+            <path d="M54 30 L60 36 L70 26 M54 50 L60 56 L70 46" stroke="#2EE6A6" stroke-width="2.5"/><path d="M78 31 H102 M78 51 H102 M54 70 H102" stroke="#5B6B84" stroke-width="2"/>
+            <circle cx="170" cy="42" r="22" stroke="#5B6B84" stroke-width="2.5"/><path d="M186 58 L206 78" stroke="#2EE6A6" stroke-width="3"/>
+          </svg>
+          <span class="idx">04</span>
+          <h3>Audits &amp; reviews</h3>
+          <p>Scoped reviews of a single system, pipeline or launch, with prioritized findings and a plan your engineers can work through.</p>
+          <span class="meta">Architecture review · pre-launch · retest</span>
+          <a class="more" href="#contact" data-topic="Audits and reviews">Discuss a review →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. Partner Advisory -->
+  <section id="partner-advisory" class="pa">
+    <div class="wrap split">
+      <div class="stack">
+        <span class="label"><b>05</b>&nbsp; Partner Advisory</span>
+        <h2>Partner-led market entry into North America.</h2>
+        <p class="muted">For emerging and growth-stage security vendors, the fastest route to North American buyers usually runs through value-added resellers (VARs). We build and run a partner-first go-to-market plan that resellers will actually back.</p>
+        <p class="muted">The advice is practical and channel-led, and it's measured by pipeline rather than slideware.</p>
+        <div class="tags"><span class="chip">VAR-led GTM</span><span class="chip">Channel enablement</span><span class="chip">Fractional leadership</span></div>
+        <div class="actions"><a class="btn ghost" href="#contact" data-topic="Partner Advisory">Discuss partner advisory</a></div>
+      </div>
+      <div class="pa-list">
+        <div class="pa-item"><span class="idx">5.1</span><h3>North America channel entry</h3><p>A market-readiness assessment, a VAR engagement strategy, and a first-90-day execution plan partners will respond to.</p></div>
+        <div class="pa-item"><span class="idx">5.2</span><h3>VAR-led GTM strategy</h3><p>Partner prioritization and segmentation, joint business plans with your top resellers, and enablement built around their sellers.</p></div>
+        <div class="pa-item"><span class="idx">5.3</span><h3>Enablement &amp; partner execution</h3><p>Sales and solutions-engineer enablement that changes behavior, co-selling to speed up pipeline, and a quarterly execution cadence with clear metrics.</p></div>
+        <div class="pa-item"><span class="idx">5.4</span><h3>Fractional GTM &amp; channel leadership</h3><p>Senior-level guidance for founders and CROs, with clear accountability for outcomes and without the cost of a full-time hire.</p></div>
+        <div class="pa-item"><span class="idx">5.5</span><h3>Channel marketing &amp; demand</h3><p>Partner-ready messaging and use cases, co-marketing programs that build pipeline, and tracking of partner-sourced and partner-influenced demand.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Consultation prompt -->
+  <section class="band">
+    <div class="wrap">
+      <div class="stack">
+        <span class="label">A private technical conversation</span>
+        <h2>Got a hard security question? Let's work through it.</h2>
+        <p class="muted">Bring an architecture diagram, a noisy dashboard or a launch date. We'll talk it through and agree on a sensible next step.</p>
+      </div>
+      <a class="btn primary" href="#contact">Request a scoping call</a>
+    </div>
+  </section>
+
+  <!-- 5. Process -->
+  <section id="approach">
+    <div class="wrap split">
+      <div class="stack">
+        <span class="label">For teams building something new</span>
+        <h2>Security needs a plan, not just a scanner.</h2>
+        <ol class="steps3">
+          <li><span class="n">1</span><strong>Define what needs protecting</strong><span class="d">The data, the users, the systems that matter most, and the threats that realistically apply.</span></li>
+          <li><span class="n">2</span><strong>Map the technical choices</strong><span class="d">Accounts, identities, network paths, model endpoints, and the dependencies between them.</span></li>
+          <li><span class="n">3</span><strong>Plan how it will run</strong><span class="d">Who owns each control, which findings page someone, and what gets checked before launch.</span></li>
+        </ol>
+        <div class="actions"><a class="btn ghost" href="#questions">Read about the approach</a></div>
+      </div>
+      <div class="riskpanel" role="group" aria-label="Example cyber risk charts">
+        <div class="rp-block">
+          <div class="rp-head"><span class="label">Residual risk score by quarter</span><span class="rp-delta">−62%</span></div>
+          <svg class="chart" viewBox="0 0 290 175" role="img" aria-label="Residual risk score falls from 82 in Q1 to 31 in Q4, below the risk appetite of 40"><path class="grid" d="M40 150.0 H275"/><text class="ax" x="34" y="153.0" text-anchor="end">0</text><path class="grid" d="M40 117.5 H275"/><text class="ax" x="34" y="120.5" text-anchor="end">25</text><path class="grid" d="M40 85.0 H275"/><text class="ax" x="34" y="88.0" text-anchor="end">50</text><path class="grid" d="M40 52.5 H275"/><text class="ax" x="34" y="55.5" text-anchor="end">75</text><path class="grid" d="M40 20.0 H275"/><text class="ax" x="34" y="23.0" text-anchor="end">100</text><path class="appetite" d="M40 98.0 H275"/><text class="ax ap" x="44" y="112.0" text-anchor="start">Risk appetite · 40</text><path class="area" d="M58 150.0 L58,43.4 L124,66.8 L190,88.9 L256,109.7 L256 150.0 Z"/><polyline class="trend" points="58,43.4 124,66.8 190,88.9 256,109.7"/><circle class="pt" cx="58" cy="43.4" r="3.5"/><text class="val" x="58" y="33.4" text-anchor="middle">82</text><text class="ax" x="58" y="166.0" text-anchor="middle">Q1</text><circle class="pt" cx="124" cy="66.8" r="3.5"/><text class="val" x="124" y="56.8" text-anchor="middle">64</text><text class="ax" x="124" y="166.0" text-anchor="middle">Q2</text><circle class="pt" cx="190" cy="88.9" r="3.5"/><text class="val" x="190" y="78.9" text-anchor="middle">47</text><text class="ax" x="190" y="166.0" text-anchor="middle">Q3</text><circle class="pt-end" cx="256" cy="109.7" r="5"/><text class="val end" x="256" y="127.7" text-anchor="middle">31</text><text class="ax" x="256" y="166.0" text-anchor="middle">Q4</text></svg>
+        </div>
+        <p class="fine">Illustrative example, not client data.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Operational view -->
+  <section class="band">
+    <div class="wrap split" style="display:grid">
+      <div class="stack">
+        <span class="label">The operational view</span>
+        <h2>What should your team be watching?</h2>
+        <div class="watch">
+          <div><span class="dot"></span><strong>Identity drift</strong><span class="d">Whether new roles and keys stay within the access model you agreed on.</span></div>
+          <div><span class="dot"></span><strong>Finding quality</strong><span class="d">How many alerts are duplicates or noise, and how fast real ones reach an owner.</span></div>
+          <div><span class="dot"></span><strong>Model access</strong><span class="d">Who can invoke your LLM endpoints, with which credentials, and what data they can pull.</span></div>
+          <div><span class="dot"></span><strong>Incident response</strong><span class="d">Who receives the page, who owns the next step, and how fast access can be revoked.</span></div>
+        </div>
+        <p class="fine">These are review topics, not live telemetry or reported client results.</p>
+      </div>
+      <div class="stack">
+        <h3>A useful plan goes past the initial setup.</h3>
+        <p class="muted">Controls drift as teams ship. We leave you with guardrails in code, a findings pipeline that stays clean, and runbooks that name who acts when something fires.</p>
+        <p class="muted">For AI services, that includes how model credentials rotate, how retrieval respects existing permissions, and how prompts and outputs are logged.</p>
+        <div class="actions"><a class="btn ghost" href="#approach">Explore our approach</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQ -->
+  <section id="questions" class="band">
+    <div class="wrap split" style="display:grid;align-items:start">
+      <div class="stack">
+        <span class="label">Before we talk</span>
+        <h2>The practical questions, answered.</h2>
+      </div>
+      <div class="faq">
+        <details open><summary>What can knACK Cyber help with?</summary><p>Cloud security posture reviews, normalizing findings from multiple security vendors into one schema, secure design for internal AI and LLM services, and scoped audits of a single system or launch.</p></details>
+        <details><summary>Which security tools do you work with?</summary><p>Most major CSPM, vulnerability and code scanners, plus native cloud services such as AWS Security Hub. We map their output to a common schema based on OCSF, so swapping a vendor later does not break your pipeline.</p></details>
+        <details><summary>Can you review an internal LLM or RAG service?</summary><p>Yes. We look at how users and services authenticate to the model (for example on AWS Bedrock), what the retrieval layer can access, and how prompts, outputs and logs are handled.</p></details>
+        <details><summary>Do you work with security vendors?</summary><p>Yes. Our Partner Advisory practice helps emerging and growth-stage security vendors enter North America through resellers, from channel strategy and partner enablement to fractional GTM leadership.</p></details>
+        <details><summary>How do I arrange a scoping call?</summary><p>Send a short note through the form below. We reply with a few times for a call, then follow up with a written scope and fee before any work begins.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Contact -->
+  <section id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-copy">
+        <span class="label">Your next step</span>
+        <h2>Tell us what you're securing.</h2>
+        <p class="muted">Whether it's a cloud estate, a findings backlog or a new AI service, a short description is enough to start.</p>
+        <div class="contact-block">
+          <strong class="ph">[Contact name]</strong>
+          <span>knACK Cyber</span>
+          <span class="ph">[Street address]</span>
+          <span class="ph">[Phone number]</span>
+          <span class="mint">hello@knackcyber.com</span>
+        </div>
+      </div>
+      <form id="contact-form" class="formbox" novalidate>
+        <h3>Let's start with your question.</h3>
+        <div class="row2">
+          <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="f-email">Your email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="field"><label for="f-co">Company or website (optional)</label><input id="f-co" name="company" autocomplete="organization"></div>
+        <div class="field">
+          <label for="f-topic">Topic</label>
+          <select id="f-topic" name="topic">
+            <option>Cloud security posture</option>
+            <option>Finding normalization</option>
+            <option>Private AI security</option>
+            <option>Audits and reviews</option>
+            <option>Partner Advisory</option>
+            <option>I'm not sure yet</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Message</label><textarea id="f-msg" name="message" placeholder="e.g. Three scanners, 40k open findings, nobody trusts the numbers."></textarea></div>
+        <p class="notice">Please don't include access keys, passwords or other credentials. Sending an enquiry doesn't confirm an engagement.</p>
+        <div class="actions"><button class="btn primary" type="submit">Prepare my enquiry</button></div>
+        <p class="form-note" id="form-note" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="big">
+  <div class="wrap">
+    <div class="cols">
+      <div class="stack">
+        <a class="logo" href="#top" aria-label="knACK CYBER home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 0 610 160" role="img" aria-label="knACK CYBER"><g transform="translate(0 15) scale(1.1204) translate(12 -40)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M158 150 L52 150 C20 150 14 108 44 102 C40 70 78 54 100 72 C112 44 150 46 158 70" stroke="#5B6B84" stroke-width="5"/>
+<path d="M2 124 L50 124 L64 92 L75 112 L84 128 L94 112" stroke="#E8EDF5" stroke-width="5"/>
+<circle cx="2" cy="124" r="6" fill="#E8EDF5" stroke="none"/>
+<path d="M94 112 L112 80 L127 132 L140 112 L174 112" stroke="#2EE6A6" stroke-width="6"/>
+<circle cx="187" cy="112" r="11" fill="#2EE6A6" stroke="none"/>
+</g>
+<path d="M276.00 91.64V6.96H293.40V51.97H301.99L315.33 27.84H334.70L316.95 59.04L335.05 91.64H315.33L301.87 66.58H293.40V91.64Z M340.62 91.64V27.84H357.44V40.02H362.54L357.44 44.08Q357.44 35.96 362.08 31.32Q366.72 26.68 374.60 26.68Q383.88 26.68 389.51 33.18Q395.14 39.67 395.14 50.46V91.64H377.74V52.20Q377.74 47.21 375.13 44.49Q372.52 41.76 367.76 41.76Q363.12 41.76 360.57 44.49Q358.02 47.21 358.02 52.20V91.64Z" fill="#E8EDF5"/>
+<path d="M400.82 91.64 421.58 6.96H443.62L464.62 91.64H446.87L442.81 72.50H422.63L418.57 91.64ZM425.53 58.58H439.80L435.74 38.16Q434.92 33.76 434.05 29.41Q433.18 25.06 432.72 22.62Q432.26 25.06 431.50 29.35Q430.75 33.64 429.82 38.05Z M498.26 92.80Q489.68 92.80 483.30 89.61Q476.92 86.42 473.38 80.68Q469.84 74.94 469.84 67.28V31.32Q469.84 23.55 473.38 17.86Q476.92 12.18 483.30 8.99Q489.68 5.80 498.26 5.80Q506.73 5.80 513.05 8.99Q519.37 12.18 522.91 17.86Q526.45 23.55 526.45 31.32H509.05Q509.05 26.22 506.21 23.55Q503.36 20.88 498.14 20.88Q492.92 20.88 490.08 23.55Q487.24 26.22 487.24 31.32V67.28Q487.24 72.27 490.08 74.99Q492.92 77.72 498.14 77.72Q503.36 77.72 506.21 74.99Q509.05 72.27 509.05 67.28H526.45Q526.45 74.94 522.91 80.68Q519.37 86.42 513.05 89.61Q506.73 92.80 498.26 92.80Z M535.38 91.64V6.96H552.78V39.79H561.02L574.94 6.96H593.84L576.44 47.44L594.54 91.64H575.40L561.02 55.80H552.78V91.64Z" fill="#2EE6A6"/>
+<path d="M284.55 148.90Q281.97 148.90 280.05 147.93Q278.13 146.96 277.09 145.12Q276.04 143.28 276.04 140.81V128.49Q276.04 125.99 277.09 124.16Q278.13 122.34 280.05 121.37Q281.97 120.40 284.55 120.40Q287.14 120.40 289.04 121.39Q290.94 122.38 291.98 124.18Q293.03 125.99 293.03 128.49H288.92Q288.92 126.33 287.78 125.19Q286.64 124.05 284.55 124.05Q282.46 124.05 281.30 125.19Q280.14 126.33 280.14 128.46V140.81Q280.14 142.93 281.30 144.09Q282.46 145.25 284.55 145.25Q286.64 145.25 287.78 144.09Q288.92 142.93 288.92 140.81H293.03Q293.03 143.28 291.98 145.10Q290.94 146.92 289.04 147.91Q287.14 148.90 284.55 148.90Z M324.91 148.52V138.30L316.66 120.78H320.92L325.82 131.27Q326.31 132.29 326.62 133.19Q326.92 134.08 327.04 134.57Q327.11 134.08 327.44 133.19Q327.76 132.29 328.21 131.27L333.00 120.78H337.26L329.01 138.30V148.52Z M361.35 148.52V120.78H369.52Q373.47 120.78 375.71 122.68Q377.96 124.58 377.96 127.92Q377.96 129.82 377.14 131.21Q376.32 132.60 374.88 133.36Q373.43 134.12 371.50 134.12V133.74Q373.59 133.70 375.18 134.52Q376.78 135.33 377.69 136.93Q378.60 138.53 378.60 140.73Q378.60 143.09 377.56 144.85Q376.51 146.62 374.59 147.57Q372.67 148.52 370.05 148.52ZM365.34 144.99H369.71Q371.91 144.99 373.21 143.81Q374.50 142.63 374.50 140.54Q374.50 138.41 373.21 137.12Q371.91 135.83 369.71 135.83H365.34ZM365.34 132.41H369.48Q371.53 132.41 372.71 131.31Q373.89 130.20 373.89 128.34Q373.89 126.48 372.71 125.40Q371.53 124.31 369.52 124.31H365.34Z M404.25 148.52V120.78H420.55V124.43H408.28V132.29H419.22V135.90H408.28V144.87H420.55V148.52Z M446.43 148.52V120.78H455.13Q457.76 120.78 459.69 121.79Q461.63 122.79 462.72 124.62Q463.80 126.44 463.80 128.91Q463.80 131.69 462.37 133.72Q460.95 135.75 458.52 136.59L464.18 148.52H459.50L454.45 137.12H450.54V148.52ZM450.54 133.51H455.13Q457.19 133.51 458.40 132.28Q459.62 131.04 459.62 128.99Q459.62 126.86 458.40 125.64Q457.19 124.43 455.13 124.43H450.54Z" fill="#A9B6CA"/>
+<rect x="505.80" y="133.34" width="87.00" height="3" fill="#2EE6A6" fill-opacity="0.8"/>
+</svg></a>
+        <p class="muted" style="font-size:var(--s-sm)">Security consulting for cloud and AI teams.</p>
+      </div>
+      <div><h4>Explore</h4><ul><li><a href="#services">Cyber Services</a></li><li><a href="#partner-advisory">Partner Advisory</a></li><li><a href="#approach">How we work</a></li><li><a href="#questions">Questions</a></li><li><a href="#contact">Contact us</a></li></ul></div>
+      <div><h4>The details</h4><ul><li><a href="#top">Privacy policy</a></li><li><a href="#top">Terms of service</a></li><li><a href="#top">Cookie policy</a></li></ul></div>
+      <div><h4>Contact</h4><ul class="muted"><li class="ph">[Contact name]</li><li class="ph">[Street address]</li><li class="ph">[Phone number]</li><li class="mint">hello@knackcyber.com</li></ul></div>
+    </div>
+    <div class="bottom">
+      <small class="fine">© 2026 knACK Cyber</small>
+      <small class="fine">Scope and fees are agreed separately. This site is general information, not a guarantee of specific outcomes.</small>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var data = {
+    a: '<span class="c">// Vendor A: CSPM alert</span>\n{\n  <span class="k">"alertId"</span>: <span class="s">"A-88213"</span>,\n  <span class="k">"policy"</span>: <span class="s">"S3 bucket allows public read"</span>,\n  <span class="k">"risk"</span>: <span class="s">"Critical"</span>,\n  <span class="k">"resource"</span>: <span class="s">"arn:aws:s3:::acme-exports"</span>,\n  <span class="k">"firstSeen"</span>: <span class="s">"2026-10-28T14:02:11Z"</span>\n}',
+    b: '<span class="c">// Vendor B: vulnerability scanner</span>\n{\n  <span class="k">"finding_uid"</span>: <span class="s">"vb_5f1c9e"</span>,\n  <span class="k">"title"</span>: <span class="s">"Public access block disabled"</span>,\n  <span class="k">"severity_score"</span>: <span class="n">7.5</span>,\n  <span class="k">"asset"</span>: { <span class="k">"name"</span>: <span class="s">"acme-exports"</span> },\n  <span class="k">"detected"</span>: <span class="s">"2026-10-28 14:09"</span>\n}',
+    n: '<span class="c">// knACK normalized record (OCSF-aligned)</span>\n{\n  <span class="k">"finding_id"</span>: <span class="s">"kc-2026-004417"</span>,\n  <span class="k">"title"</span>: <span class="s">"S3 bucket publicly readable"</span>,\n  <span class="k">"severity_id"</span>: <span class="n">4</span>,\n  <span class="k">"resource"</span>: <span class="s">"arn:aws:s3:::acme-exports"</span>,\n  <span class="k">"sources"</span>: [<span class="s">"vendor_a"</span>, <span class="s">"vendor_b"</span>],\n  <span class="k">"owner"</span>: <span class="s">"data-platform"</span>,\n  <span class="k">"data_class"</span>: <span class="s">"customer-pii"</span>,\n  <span class="k">"status"</span>: <span class="s">"ack"</span>\n}'
+  };
+  var out = document.getElementById('term-out');
+  if (out) {
+  var tabs = document.querySelectorAll('.tabs button');
+  function show(k) {
+    out.innerHTML = data[k];
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.k === k ? 'true' : 'false'); });
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.dataset.k); }); });
+  show('n');
+  }
+
+  var sel = document.getElementById('f-topic');
+  document.querySelectorAll('a[data-topic]').forEach(function (a) {
+    a.addEventListener('click', function () { sel.value = a.dataset.topic; });
+  });
+
+  var form = document.getElementById('contact-form');
+  var note = document.getElementById('form-note');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('f-name').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      note.style.color = '#FF8A8A';
+      note.textContent = 'Add your name and a valid email to continue.';
+      return;
+    }
+    note.style.color = '';
+    note.textContent = 'Thanks, ' + name + '. This form is not connected to email yet, so please send your note to hello@knackcyber.com.';
+  });
+})();
+</script>
+
+</body>
+</html>
